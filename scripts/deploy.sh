@@ -35,6 +35,9 @@ git pull origin main
 echo "== [4/6] Build Docker images =="
 docker compose build --pull
 
+echo "== [5a/6] Stop old containers =="
+docker compose down
+
 echo "== [5/6] Restart services =="
 docker compose up -d
 
