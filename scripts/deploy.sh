@@ -6,10 +6,18 @@ LOG_DIR="/srv/stock-tracker/logs"
 LOG_FILE="$LOG_DIR/deploy.log"
 COMPOSE_FILE="docker-compose.yml"
 
+# 确保日志目录存在
 mkdir -p "$LOG_DIR"
+chmod 700 "$LOG_DIR"
 
+# 日志输出到文件 + 控制台
 exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo "===== DEPLOY START $(date) ====="
+
+# 使用指定 SSH key 拉 GitHub 代码
 export GIT_SSH_COMMAND='ssh -i /home/deploy/.ssh/github-deploy-key -o StrictHostKeyChecking=no'
+
 echo "== [1/6] Git fetch =="
 git fetch origin
 
@@ -21,7 +29,7 @@ echo "== [3/6] Pull latest main =="
 git checkout main
 git pull origin main
 
-echo "== [4/6] Build images =="
+echo "== [4/6] Build Docker images =="
 docker compose build --pull
 
 echo "== [5/6] Restart services =="
@@ -40,3 +48,4 @@ echo "== Cleanup old images =="
 docker image prune -f
 
 echo "✅ Deploy success"
+echo "===== DEPLOY END $(date) ====="
