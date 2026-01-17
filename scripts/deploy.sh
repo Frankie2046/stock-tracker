@@ -13,6 +13,12 @@ chmod 700 "$LOG_DIR"
 # 日志输出到文件 + 控制台
 exec > >(tee -a "$LOG_FILE") 2>&1
 
+# ---todo
+eval "$(ssh-agent -s)"
+ssh-add /home/deploy/.ssh/github-deploy-key
+# 使用指定 SSH key 拉 GitHub 代码
+export GIT_SSH_COMMAND='ssh -i /home/deploy/.ssh/github-deploy-key -o StrictHostKeyChecking=no'
+
 echo "===== DEPLOY START $(date) ====="
 
 echo "== [1/6] Git fetch =="
