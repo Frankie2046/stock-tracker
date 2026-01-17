@@ -14,7 +14,8 @@ chmod 700 "$LOG_DIR"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "===== DEPLOY START $(date) ====="
-
+eval "$(ssh-agent -s)"
+ssh-add /home/deploy/.ssh/github-deploy-key
 # 使用指定 SSH key 拉 GitHub 代码
 export GIT_SSH_COMMAND='ssh -i /home/deploy/.ssh/github-deploy-key -o StrictHostKeyChecking=no'
 
