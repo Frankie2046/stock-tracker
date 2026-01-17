@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Mag7 & ETF 实时监控 (FMP)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .container { max-width: 900px; margin: auto; }
+        h2 { color: #333; border-left: 5px solid #007bff; padding-left: 15px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        th, td { padding: 15px 20px; text-align: left; }
+        th { background-color: #007bff; color: white; text-transform: uppercase; font-size: 14px; }
+        tr { border-bottom: 1px solid #eee; }
+        tr:last-child { border-bottom: none; }
+        .danger { background-color: #fff5f5; color: #e74c3c; font-weight: bold; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; background: #eee; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>市场监控仪表盘 <small style="font-size: 0.5em; color: #666;">(数据由 FMP 提供)</small></h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>代码</th>
+                    <th>名称</th>
+                    <th>当前价</th>
+                    <th>52周最高</th>
+                    <th>52周最低</th>
+                    <th>距最高点 (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in stocks %}
+                <tr class="{{ 'danger' if stock.diff_percent <= -20 else '' }}">
+                    <td><span class="badge">{{ stock.symbol }}</span></td>
+                    <td>{{ stock.name }}</td>
+                    <td>${{ "{:,.2f}".format(stock.last_close) }}</td>
+                    <td>${{ "{:,.2f}".format(stock.high_52w) }}</td>
+                    <td>${{ "{:,.2f}".format(stock.low_52w) }}</td>
+                    <td>{{ stock.diff_percent }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p style="color: #999; font-size: 12px; margin-top: 10px;">注：背景标红表示价格距52周高点下跌超过 20%（进入技术性熊市）。</p>
+    </div>
+</body>
+</html>
+
