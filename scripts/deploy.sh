@@ -29,7 +29,7 @@ PREV_COMMIT=$(git rev-parse HEAD)
 echo "PREV_COMMIT=$PREV_COMMIT"
 
 echo "== [3/6] Pull latest main =="
-git checkout main
+git checkout -f main
 git pull origin main
 
 echo "== [4/6] Build Docker images =="
