@@ -17,9 +17,9 @@ echo "== [2/6] Save current commit for rollback =="
 PREV_COMMIT=$(git rev-parse HEAD)
 echo "PREV_COMMIT=$PREV_COMMIT"
 
-echo "== [3/6] Pull latest master =="
-git checkout master
-git pull origin master
+echo "== [3/6] Pull latest main =="
+git checkout main
+git pull origin main
 
 echo "== [4/6] Build images =="
 docker compose build --pull
