@@ -11,7 +11,7 @@ import logging
 load_dotenv()
 
 FMP_API_KEY = os.getenv("SECRET")
-TICKERS = ["AAPL","MSFT","GOOGL","AMZN","NVDA","META","TSLA"]
+TICKERS = ["AAPL","MSFT","GOOGL","AMZN","NVDA","META","TSLA","TSM"]
 
 app = Flask(__name__)
 
