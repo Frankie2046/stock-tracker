@@ -9,7 +9,7 @@ COMPOSE_FILE="docker-compose.yml"
 mkdir -p "$LOG_DIR"
 
 exec > >(tee -a "$LOG_FILE") 2>&1
-
+export GIT_SSH_COMMAND='ssh -i /home/deploy/.ssh/github-deploy-key -o StrictHostKeyChecking=no'
 echo "== [1/6] Git fetch =="
 git fetch origin
 
