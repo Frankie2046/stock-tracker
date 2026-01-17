@@ -11,21 +11,22 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: Checkout (for metadata only)
+      # 仅拉取仓库 metadata（为了 Actions 识别）
+      - name: Checkout
         uses: actions/checkout@v4
 
+      # 通过 SSH 连接服务器执行 deploy.sh
       - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           port: ${{ secrets.DEPLOY_PORT }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script_stop: true
-          command_timeout: 30m
           script: |
             set -e
-            echo "===== DEPLOY START $(date) ====="
+            echo "===== START REMOTE DEPLOY ====="
             cd /srv/stock-tracker
             ./scripts/deploy.sh
-            echo "===== DEPLOY END $(date) ====="
+            echo "===== END REMOTE DEPLOY ====="
