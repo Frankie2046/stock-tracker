@@ -2,7 +2,7 @@
 set -euo pipefail
 
 APP_NAME="stock-app"
-LOG_DIR="/var/log/ci"
+LOG_DIR="/srv/stock-tracker/logs"
 LOG_FILE="$LOG_DIR/deploy.log"
 COMPOSE_FILE="docker-compose.yml"
 
