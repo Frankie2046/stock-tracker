@@ -29,6 +29,5 @@ jobs:
             set -e
             echo "===== START REMOTE DEPLOY ====="
             cd /srv/stock-tracker
-            chmod +x /srv/stock-tracker/scripts/deploy.sh
             ./scripts/deploy.sh
             echo "===== END REMOTE DEPLOY ====="
