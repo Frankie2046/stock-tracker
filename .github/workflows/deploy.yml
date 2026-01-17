@@ -1,0 +1,31 @@
+name: Deploy to CN Server
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout (for metadata only)
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.CN_HOST }}
+          username: ${{ secrets.CN_USER }}
+          port: ${{ secrets.CN_SSH_PORT }}
+          key: ${{ secrets.CN_SSH_KEY }}
+          script_stop: true
+          command_timeout: 30m
+          script: |
+            set -e
+            echo "===== DEPLOY START $(date) ====="
+            cd /srv/stock-tracker
+            ./scripts/deploy.sh
+            echo "===== DEPLOY END $(date) ====="
