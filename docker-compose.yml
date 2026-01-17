@@ -1,5 +1,8 @@
 services:
   app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: stock-app:latest
     container_name: stock-app
     restart: unless-stopped
@@ -7,12 +10,8 @@ services:
       - "5000:5000"
     env_file:
       - .env
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: 512M
-    mem_swappiness: 10
+    mem_limit: 512m
+    cpus: 1.0
     logging:
       driver: json-file
       options:
