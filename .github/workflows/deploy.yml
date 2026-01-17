@@ -14,7 +14,8 @@ jobs:
       # 仅拉取仓库 metadata（为了 Actions 识别）
       - name: Checkout
         uses: actions/checkout@v4
-
+        with:
+            ref: main
       # 通过 SSH 连接服务器执行 deploy.sh
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
