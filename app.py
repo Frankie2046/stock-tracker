@@ -4,14 +4,13 @@ from flask import Flask, render_template
 from flask_caching import Cache
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
-import logging
-
+from config.log import logger
+from config.apollo import apollo
 # ---------------------------
 # 加载环境变量
 load_dotenv()
 
 FMP_API_KEY = os.getenv("SECRET")
-TICKERS = ["AAPL","MSFT","GOOGL","AMZN","NVDA","META","TSLA","TSM"]
 
 app = Flask(__name__)
 
@@ -26,13 +25,6 @@ app = Flask(__name__)
 # cache.init_app(app)
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache'})
 cache.init_app(app)
-# ---------------------------
-# 日志配置
-formatter = logging.Formatter("[%(asctime)s] %(levelname)s in %(module)s: %(message)s")
-handler = logging.StreamHandler()
-handler.setFormatter(formatter)
-app.logger.setLevel(logging.DEBUG)
-app.logger.addHandler(handler)
 
 # ---------------------------
 # 获取股票数据
@@ -69,14 +61,17 @@ def get_fmp_data(ticker):
 
 # ---------------------------
 # 并行请求所有股票
-def fetch_all_stocks():
+def fetch_all_stocks(TICKERS):
     with ThreadPoolExecutor(max_workers=len(TICKERS)) as executor:
         results = executor.map(get_fmp_data, TICKERS)
     return list(results)
 
 @app.route('/')
 def index():
-    stocks = fetch_all_stocks()
+    cfg = apollo.config
+    logger.debug(f"Serving current config: {cfg}")
+    TICKERS = cfg.get("tickers", "AAPL").split(",")
+    stocks = fetch_all_stocks(TICKERS)
     app.logger.debug(f"最终 stocks 数据: {stocks}")
     return render_template('index.html', stocks=stocks)
 
